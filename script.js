@@ -3,10 +3,15 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoiam5iMjM4NyIsImEiOiJjaW8zb2o2bDkwMWJudmJsempjaHBvc2hrIn0.gxSz_BeDIJlbDrKExBPaEQ';
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v10',
+    // style:'style.json',
+    style: 'mapbox://styles/mapbox/outdoors-v10',
     center: [-113.7505012, 48.5562206],
     zoom: 8
 });
+
+map.addControl(new MapboxDirections({
+    accessToken: mapboxgl.accessToken
+}), 'top-left');
 
 
 // When the map loads then run all this.
@@ -148,14 +153,9 @@ map.on('load', function () {
         map.setFilter("trail-hover", ["==", "TRLNAME", ""]);
     });
 
-    //Denver Demographics Layer
-    map.addSource('demo', {
-        "type": "vector",
-        "url": 'mapbox://jnb2387.3kzsjc32'
-    });
     map.on('click', function (e) {//when the user moves the mouse
         var trailinfo = map.queryRenderedFeatures(e.point, {//query where the user moved for features set it to a variable
-            layers: ['demo', 'trails']// the layers to query when the user moves
+            layers: ['glaciers','glacierpoints', 'trails']// the layers to query when the user moves
         });
         if (trailinfo.length > 0) {//if there is any features that are returned in the query set the info in the pd element.
 
@@ -168,37 +168,6 @@ map.on('load', function () {
             document.getElementById('pd').innerHTML = '<p>Hover over a Census Area</p>';
         }
     });
-    //3D layer with trailinfo
-    map.addLayer({
-        "id": "demo",
-        'type': 'fill-extrusion',
-        "source": "demo",
-        'source-layer': 'census_neighborhood_demograph-bnbntm',
-        "layout": {
-            'visibility': 'visible',
-        },
-        "paint": {
-            'fill-extrusion-base': 0,
-            'fill-extrusion-color':
-            {
-                'property': 'POPULATION',
-                'stops': [
-                    [0, 'blue'],
-                    [2000, 'gold'],
-                    [5000, 'green'],
-                    [9000, 'black'],
-                    [15169, 'red']
-                ]
-
-            },
-            'fill-extrusion-height': {
-                'type': 'identity',
-                'property': 'POPULATION'
-            },
-
-            'fill-extrusion-opacity': .9,
-        }
-    });
 
 });// end map load
 
@@ -207,7 +176,7 @@ $(document).ready(function () {
         var ajaxfeatures;
         $.ajax({
             method: 'GET',
-            url: 'glacierpoints.geojson',
+            url: 'glaciers.json',
             crossDomain: true,
             dataType: 'json',
             headers: {
@@ -217,7 +186,7 @@ $(document).ready(function () {
                 //Add 3D another layer.
                 var ajaxLayer = map.addLayer({
 
-                    "id": "my3d",
+                    "id": "glaciers",
                     'type': 'fill-extrusion',
                     'source': {
                         'type': 'geojson',
@@ -230,22 +199,21 @@ $(document).ready(function () {
                         'fill-extrusion-base': 0,
                         'fill-extrusion-color':
                         {
-                            'property': 'Miles',
+                            'property': 'ELEVATION',
                             'stops': [
-                                [0, 'blue'],
-                                [2000, 'gold'],
-                                [5000, 'green'],
-                                [9000, 'black'],
-                                [15169, 'red']
+                                [0, '#756bb1']
+                            
+                               
                             ]
                         },
+                        'fill-extrusion-outline':1,
                         'fill-extrusion-height': {
                             'type': 'identity',
-                            'property': 'Miles'
+                            'property': 'ELEVATION'
                         },
                         'fill-extrusion-opacity': .9,
                     }
-                });
+                },'poi-scalerank1');
 
 
                 console.log(response);
@@ -349,20 +317,6 @@ $(document).ready(function () {
                 .addTo(map);
         });
     })
-    // var visibility= map.getLayoutProperty('glacierpoints','visibility');
-    //     $('#demobtn').click(function () {
-    //         console.log("Demo Button Clicked");
-
-    //         var visibility = map.getLayoutProperty('demo', 'visibility')
-    //         if (visibility === 'visible') {
-    //             map.setLayoutProperty('demo', 'visibility', 'none');
-    //         } else {
-    //             map.setLayoutProperty('demo', 'visibility', 'visible');
-    //         }
-    //     });
-
-
-
     //======controls for the trail layer
     //button to toggle trail layer visibility
     $('#trailbtn').click(function () {

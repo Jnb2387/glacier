@@ -70,32 +70,32 @@
             }
         }
 
-
-        class Zoompanel { //create a class that will add the panel button to the map
-            onAdd(map) {
+//Reformat not working!
+        // class Zoompanel { //create a class that will add the panel button to the map
+        //     onAdd(map) {
                 
-                this._map = map;
-                let _this = this;
-                this._btn = document.createElement('button');// create the  button
-                this._btn.type = 'button';
-                this._btn['aria-label'] = 'Toggle Pitch';//not sure
-                this._btn.onclick = function () { //when the button is clicked
-                   var zoomnum = map.getZoom()
-                };
-                this._btn.innerHTML = zoomnum;
-                this._container = document.createElement('div');// create a div
-                this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-                this._container.appendChild(this._btn);
-                return this._container;
-            }
-            onRemove() {
-                this._container.parentNode.removeChild(this._container);
-                this._map = undefined;
-            }
-        }
+        //         this._map = map;
+        //         let _this = this;
+        //         this._btn = document.createElement('button');// create the  button
+        //         this._btn.type = 'button';
+        //         this._btn['aria-label'] = 'Toggle Pitch';//not sure
+        //         this._btn.onclick = function () { //when the button is clicked
+        //            var zoomnum = map.getZoom()
+        //         };
+        //         this._btn.innerHTML = zoomnum;
+        //         this._container = document.createElement('div');// create a div
+        //         this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+        //         this._container.appendChild(this._btn);
+        //         return this._container;
+        //     }
+        //     onRemove() {
+        //         this._container.parentNode.removeChild(this._container);
+        //         this._map = undefined;
+        //     }
+        // }
 
 
-        map.addControl(new Zoompanel('bottom-right'))
+        // map.addControl(new Zoompanel('bottom-right'))
         map.addControl(new Sidepanel('bottom-right'))
         //Add the zoom and nav controls.
         var nav = new mapboxgl.NavigationControl();
