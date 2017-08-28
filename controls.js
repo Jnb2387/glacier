@@ -100,13 +100,24 @@
         //Add the zoom and nav controls.
         var nav = new mapboxgl.NavigationControl();
         map.addControl(nav, 'top-left');
-        // Add geolocate control to the map.
-        map.addControl(new mapboxgl.GeolocateControl({
-            positionOptions: {
-                enableHighAccuracy: true
-            },
-            trackUserLocation: true
-        }));
+
+
+        // var poscoords=[];
+        // // Add geolocate control to the map.
+        // var geoLocate = new mapboxgl.GeolocateControl({
+        //     positionOptions: {
+        //         enableHighAccuracy: true
+        //     },
+        //     trackUserLocation: true
+        // });
+        // map.addControl(geoLocate);
+        // geoLocate.on('geolocate', function(e) {
+        //     poscoords.push(geoLocate._lastKnownPosition.coords.latitude);
+        //     poscoords.push(geoLocate._lastKnownPosition.coords.longitude);
+        // console.log('geolocated',poscoords)
+        // })
+
+
           map.addControl(new PitchToggle({ minpitchzoom: 11 }));
 
         //Add Scalebar.

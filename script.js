@@ -9,13 +9,43 @@ var map = new mapboxgl.Map({
     zoom: 8
 });
 
-map.addControl(new MapboxDirections({
-    accessToken: mapboxgl.accessToken
-}), 'top-left');
+// map.addControl(new MapboxDirections({
+//     accessToken: mapboxgl.accessToken
+// }), 'top-left');
 
 
 // When the map loads then run all this.
 map.on('load', function () {
+     var poscoords=[];
+        // Add geolocate control to the map.
+        var geoLocate = new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+            trackUserLocation: true
+        });
+        map.addControl(geoLocate);
+        geoLocate.on('geolocate', function(e) {
+            poscoords.push(geoLocate._lastKnownPosition.coords.latitude);
+            poscoords.push(geoLocate._lastKnownPosition.coords.longitude);
+        console.log('geolocated',poscoords)
+        })
+
+    map.addSource("states", {
+        "type": "geojson",
+        "data": "state.json"
+    });
+
+    map.addLayer({
+        "id": "state-fills",
+        "type": "fill",
+        "source": "states",
+        "layout": {},
+        "paint": {
+            "fill-color": "#627BC1",
+            "fill-opacity": 0.5
+        }
+    });
     //When the user clicks on the map query every feature where the click was.
     map.on('click', function (e) {
         var features = map.queryRenderedFeatures(e.point);//set the click point feature to the variable.
@@ -82,7 +112,7 @@ map.on('load', function () {
     });
 
     //glacier trails Vector tile hosted in mapbox studio
-    map.addSource('trails', {
+    var trails = map.addSource('trails', {
         "type": "vector",
         "url": 'mapbox://jnb2387.7b98tlt7'
     })
@@ -155,7 +185,7 @@ map.on('load', function () {
 
     map.on('click', function (e) {//when the user moves the mouse
         var trailinfo = map.queryRenderedFeatures(e.point, {//query where the user moved for features set it to a variable
-            layers: ['glaciers','glacierpoints', 'trails']// the layers to query when the user moves
+            layers: ['glaciers', 'glacierpoints', 'trails']// the layers to query when the user moves
         });
         if (trailinfo.length > 0) {//if there is any features that are returned in the query set the info in the pd element.
 
@@ -169,8 +199,125 @@ map.on('load', function () {
         }
     });
 
-});// end map load
 
+
+
+    map.addSource('nearest-hospital', {
+        type: 'geojson',
+        data: {
+            type: 'FeatureCollection',
+            features: [
+            ]
+        }
+    });
+    geoLocate.on('geolocate', function (e) {
+        // Return any features from the 'libraries' layer whenever the map is clicked
+        var libraryFeatures = map.queryRenderedFeatures(e.point, { layers: ['glacierpoints'] });
+        if (!libraryFeatures.length) {
+            return;
+        }
+        var libraryFeature = libraryFeatures[0];
+
+        // Using Turf, find the nearest hospital to library clicked
+        var nearestHospital = turf.nearest(poscoords, pointdata);
+
+        // If a nearest library is found
+        if (nearestHospital !== null) {
+            // Update the 'nearest-library' data source to include
+            // the nearest library
+            map.getSource('nearest-hospital').setData({
+                type: 'FeatureCollection',
+                features: [
+                    nearestHospital
+                ]
+            }
+            );
+            // Create a new circle layer from the 'nearest-library' data source
+            map.addLayer({
+                id: 'nearest-hospital',
+                type: 'circle',
+                source: 'nearest-hospital',
+                paint: {
+                    'circle-radius': 12,
+                    'circle-color': '#486DE0'
+                }
+            });
+        }
+        console.log(nearestHospital)
+    });
+
+var pointdata={
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                -114.42672729492188,
+                                48.81590713080018
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                -113.89663696289062,
+                                48.7643363613842
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                -114.17266845703124,
+                                48.62292419804796
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                -114.071044921875,
+                                48.89000369970676
+                            ]
+                        }
+                    }
+                ]
+            }
+
+
+    var points= map.addLayer({
+        "id": "points",
+        "type": "circle",
+        "source": {
+            "type": "geojson",
+            "data": pointdata
+
+            },
+            "layout": { },
+               'paint': {
+            // make circles larger as the user zooms from z12 to z22
+            'circle-radius': 15,
+            // color circles by ethnicity, using data-driven styles
+            'circle-color': 'red'
+            
+        }
+        });
+
+
+});// end map load
+var glacierpoints;
 $(document).ready(function () {
     $("#getAjax").click(function () {
         var ajaxfeatures;
@@ -184,6 +331,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 //Add 3D another layer.
+
                 var ajaxLayer = map.addLayer({
 
                     "id": "glaciers",
@@ -202,21 +350,19 @@ $(document).ready(function () {
                             'property': 'ELEVATION',
                             'stops': [
                                 [0, '#756bb1']
-                            
-                               
+
+
                             ]
                         },
-                        'fill-extrusion-outline':1,
                         'fill-extrusion-height': {
                             'type': 'identity',
                             'property': 'ELEVATION'
                         },
                         'fill-extrusion-opacity': .9,
                     }
-                },'poi-scalerank1');
+                }, 'poi-scalerank1');
 
 
-                console.log(response);
                 ajaxfeatures = response;
 
             }
@@ -241,35 +387,11 @@ $(document).ready(function () {
                 map.addSource('glacierpoints', {
                     'type': "geojson",
                     "data": response,
-                    'cluster': true,
-                    'clusterMaxZoom': 15, // Max zoom to cluster points on
-                    'clusterRadius': 20 // Use small cluster radius for the heatmap look
+                
                 })
-
-                var layers = [
-                    [0, 'blue'],
-                    [5, 'orange'],
-                    [20, 'red']
-                ]
-
-                layers.forEach(function (layer, i) {
-                    map.addLayer({
-                        "id": "cluster-" + i,
-                        "type": "circle",
-                        "source": "glacierpoints",
-                        "paint": {
-                            "circle-color": layer[1],
-                            "circle-radius": 70,
-                            "circle-blur": 1 // blur the circles to get a heatmap look
-                        },
-                        "filter": i === layers.length - 1 ?
-                            [">=", "point_count", layer[0]] :
-                            ["all",
-                                [">=", "point_count", layer[0]],
-                                ["<", "point_count", layers[i + 1][0]]]
-                    }, 'waterway-label');
-                });
-
+                glacierpoints = response
+                console.log(glacierpoints);
+            
                 map.addLayer({
                     'id': 'glacierpoints',
                     'source': 'glacierpoints',
