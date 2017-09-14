@@ -49,7 +49,7 @@
                 let _this = this;
                 this._btn = document.createElement('button');// create the  button
                 this._btn.type = 'button';
-                this._btn.innerHTML = "Panel";
+                this._btn.innerHTML = "MENU";
                 this._btn['aria-label'] = 'Toggle Pitch';//not sure
                 this._btn.onclick = function () { //when the button is clicked
                     if ($("#sidepanel")) {// if the panel is showing then run this
@@ -61,6 +61,7 @@
                 };
                 this._container = document.createElement('div');// create a div
                 this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                this._container.id= 'menuid'
                 this._container.appendChild(this._btn);
                 return this._container;
             }

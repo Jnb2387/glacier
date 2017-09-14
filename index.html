@@ -1,59 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Glacier App</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.js"></script>
-        <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css" rel="stylesheet">
-        <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
-        <link href="style.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.css"type="text/css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-        <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.min.js"></script>
-        <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.1/mapbox-gl-directions.js'></script>
-        <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.1/mapbox-gl-directions.css' type='text/css' />
-    </head>
 
-    <body>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12 col-md-9 mapboxgl-map" id="map"></div>
+<head>
+    <meta charset='utf-8' />
+    <title>Work App</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.1/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.1/mapbox-gl-geocoder.css' type='text/css' />
+</head>
 
-                <div class="col-xs-12 col-md-3" id="sidepanel">
-                    <h4 class="text-center">Features</h4>
-                    <!--To change the map paint properties-->
-                    <input id="myinput">
-                    <a href="#" id="btn" class="button icon sun btnpad">Change Color</a>
-                    <!--Interaction Buttons-->
-                    <!--<a href="#" class="button icon sun btnpad" id="urbanbtn">Remove Urban</a>-->
-                    <a href="#" class="button icon sun btnpad" id="getAjax">Get Glacier Data</a>
-                    <a href="#" class="button icon sun btnpad" id="getcamp">Get POI Data</a>
-                    <a href="#" class="button icon sun btnpad" id="trailbtn">Trail Button</a>
-                    <!--<a href="#" class="button icon sun btnpad" id="demobtn">Demographics Button</a>-->
-                    <!--Shows the JSON for any feature in the vector tile that is clicked on-->
-                    <pre id="allfeatures"></pre>
-                </div>
-                <!--Content displayed on the right-->
-                <div class="map-overlay" id="features">
-                    <h3 id="censustitle">Glacier Trail Info</h3>
-                    <hr>
-                    <div id="pd">
-                        <p id='beforetrailclick'>Click on a Trail</p>
-                    </div>
-                </div>
-                <div class="map-overlay" id="legend">
-                    <h4><strong>Legend</stong></h4>
-                    <p><b>0-4 blue</br>
-                    5-9 orange</br>
-                    10+ red</b></p>
-                </div>
-            </div>
+<body>
+    <div class='sidebar'>
+        <div class='heading'>
+            <h1>Our locations</h1>
         </div>
-        <script src="script.js"></script>
-        <script src="controls.js"></script>
-    </body>
+        <div id='listings' class='listings'></div>
+    </div>
+    <div id='map' class='map'> </div>
+
+    <script src="script.js"></script>    
+    <script src="controls.js"></script>    
+    
+</body>
+
 </html>
