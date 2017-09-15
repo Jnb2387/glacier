@@ -17,14 +17,15 @@
                 let _this = this;
                 this._btn = document.createElement('button');// create the 3d button
                 this._btn.className = 'mapboxgl-ctrl-icon mapboxgl-ctrl-pitchtoggle-3d';// set the class name for css styling
+                this._btn.id ="pitchbtn"
                 this._btn.type = 'button';
                 this._btn['aria-label'] = 'Toggle Pitch';//not sure
                 this._btn.onclick = function () { //when the button is clicked
                     if (map.getPitch() === 0) {// if the pitch is 0 then run this
                         let options = { pitch: _this._pitch, bearing: _this._bearing };// grab the pitch & bearing from the class constructor 
-                        if (_this._minpitchzoom && map.getZoom() > _this._minpitchzoom) {//dont really need
-                            options.zoom = _this._minpitchzoom;
-                        }
+                        // if (_this._minpitchzoom && map.getZoom() > _this._minpitchzoom) {//dont really need
+                        //     options.zoom = _this._minpitchzoom;
+                        // }
                         map.easeTo(options);
                         _this._btn.className = 'mapboxgl-ctrl-icon mapboxgl-ctrl-pitchtoggle-2d';//change button to show 2d after change
                     } else {
@@ -52,16 +53,16 @@
                 this._btn.innerHTML = "MENU";
                 this._btn['aria-label'] = 'Toggle Pitch';//not sure
                 this._btn.onclick = function () { //when the button is clicked
-                    if ($("#sidepanel")) {// if the panel is showing then run this
+                    if ($(".legend")) {// if the panel is showing then run this
                         console.log("Sidepanel Toggled")
-                        $("#sidepanel").toggle()
+                        $(".legend").toggle()
                     } else {
                         console.log("something went wrong")
                     }
                 };
                 this._container = document.createElement('div');// create a div
                 this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-                this._container.id= 'menuid'
+                this._container.id= 'menuid';
                 this._container.appendChild(this._btn);
                 return this._container;
             }

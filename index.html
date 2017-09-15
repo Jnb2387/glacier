@@ -8,21 +8,23 @@
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
-    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.1/mapbox-gl-geocoder.min.js'></script>
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.1/mapbox-gl-geocoder.css' type='text/css' />
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class='sidebar'>
+    <div id="sidebar" class='sidebar'>
         <div class='heading'>
-            <h1>Our locations</h1>
+            <h1>Passport Bars</h1>
         </div>
         <div id='listings' class='listings'></div>
     </div>
     <div id='map' class='map'> </div>
-
+    <div id='state-legend' class='legend'></div>
+    <pre id='coordinates' class='coordinates'></pre>
+    
     <script src="script.js"></script>    
     <script src="controls.js"></script>    
     
